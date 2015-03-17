@@ -1,0 +1,32 @@
+<configuration>
+    <timestamp key="byDay" datePattern="yyyyMMdd"/>
+
+    <appender name="CUSTOMER_EVENTS" class="org.aix.logback.InfluxDbAppender">
+        <influxDbUrl>http://192.168.59.103</influxDbUrl>
+        <influxDbPort>8086</influxDbPort>
+        <influxDbLogin>root</influxDbLogin>
+        <influxDbPassword>root</influxDbPassword>
+        <serieConfig>
+            <database>aTimeSeries</database>
+            <name>customer_events_${byDay}</name>
+            <columns>time,customerId,type</columns>
+        </serieConfig>
+    </appender>
+
+    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+        <file> log-${byDay}.txt </file>
+        <append>true</append>
+        <encoder>
+            <pattern>%-4relative [%thread] %-5level %logger{35} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="CustomerEvents" >
+        <appender-ref ref="CUSTOMER_EVENTS" />
+    </logger>
+
+    <root level="debug">
+        <appender-ref ref="FILE" />
+    </root>
+
+</configuration>
