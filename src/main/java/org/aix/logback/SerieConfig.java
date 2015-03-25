@@ -1,5 +1,7 @@
 package org.aix.logback;
 
+import org.slf4j.MDC;
+
 /**
  * Created by nicolas on 15/03/15.
  */
@@ -12,7 +14,6 @@ public class SerieConfig {
         return "SerieConfig{" +
                 "database='" + database + '\'' +
                 ", name='" + name + '\'' +
-                ", columns='" + columns + '\'' +
                 '}';
     }
 
@@ -34,13 +35,4 @@ public class SerieConfig {
         this.name = name;
     }
 
-    public String getColumns() {
-        return this.columns;
-    }
-
-    public void setColumns(String columns) {
-        this.columns = columns;
-    }
-
-    private String columns;
 }

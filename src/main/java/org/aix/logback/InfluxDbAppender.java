@@ -1,10 +1,13 @@
 package org.aix.logback;
 
+import ch.qos.logback.classic.encoder.PatternLayoutEncoder;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.AppenderBase;
+import ch.qos.logback.core.encoder.LayoutWrappingEncoder;
 import org.influxdb.InfluxDB;
 import org.influxdb.InfluxDBFactory;
 import org.influxdb.dto.Serie;
+import org.slf4j.MDC;
 
 import java.util.concurrent.TimeUnit;
 
@@ -74,15 +77,16 @@ public class InfluxDbAppender extends AppenderBase<ILoggingEvent> {
         System.out.println(toString());
 
         this.influxDB = InfluxDBFactory.connect(influxDbUrl + ":" + influxDbPort, influxDbLogin, influxDbPassword);
-
         try {
-            this.influxDB.createDatabase("aTimeSeries");
+            this.influxDB.createDatabase("mydb");
         } catch(Exception e) {
-            e.printStackTrace();
+            if (e.getMessage().contains("exists")==false) {
+                e.printStackTrace();
+            }
         }
 
         InfluxDbConverter converter = new InfluxDbConverter();
-        appenderExecutor = new AppenderExecutor(converter, serieConfig, influxDB);
+        appenderExecutor = new AppenderExecutor(converter, serieConfig, influxDB, getContext());
         System.out.println(":: initExecutor :: end");
 
     }

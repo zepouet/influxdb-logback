@@ -2,7 +2,7 @@ INFLUXDB-LOGBACK
 ================
 
 An Influx Appender for Logback
------------------------------------
+------------------------------
 
 Use this appender to log messages with logback to a influxdb server.
 

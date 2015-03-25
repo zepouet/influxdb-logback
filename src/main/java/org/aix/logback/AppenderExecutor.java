@@ -1,6 +1,7 @@
 package org.aix.logback;
 
 import ch.qos.logback.classic.spi.ILoggingEvent;
+import ch.qos.logback.core.Context;
 import org.influxdb.InfluxDB;
 import org.influxdb.dto.Serie;
 
@@ -14,11 +15,13 @@ public class AppenderExecutor {
     private final InfluxDbConverter influxDbConverter;
     private final SerieConfig serieConfig;
     private final InfluxDB influxDB;
+    private Context context;
 
-    public AppenderExecutor(InfluxDbConverter influxDbConverter, SerieConfig serieConfig, InfluxDB influxDB) {
+    public AppenderExecutor(InfluxDbConverter influxDbConverter, SerieConfig serieConfig, InfluxDB influxDB, Context context) {
         this.influxDbConverter = influxDbConverter;
         this.serieConfig = serieConfig;
         this.influxDB = influxDB;
+        this.context = context;
     }
 
     /**
@@ -28,8 +31,8 @@ public class AppenderExecutor {
       * @param logEvent The event that we are logging
     */
     public void append(final ILoggingEvent logEvent) {
-        Serie serie = influxDbConverter.toInflux(logEvent, serieConfig);
-        influxDB.write(serieConfig.getDatabase(), TimeUnit.MILLISECONDS, serie);
+        Serie serie = influxDbConverter.toInflux(logEvent, serieConfig, context);
+        influxDB.write(serieConfig.getDatabase(), TimeUnit.MICROSECONDS, serie);
     }
 
 }
