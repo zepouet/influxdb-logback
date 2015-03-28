@@ -77,13 +77,6 @@ public class InfluxDbAppender extends AppenderBase<ILoggingEvent> {
         System.out.println(toString());
 
         this.influxDB = InfluxDBFactory.connect(influxDbUrl + ":" + influxDbPort, influxDbLogin, influxDbPassword);
-        try {
-            this.influxDB.createDatabase("mydb");
-        } catch(Exception e) {
-            if (e.getMessage().contains("exists")==false) {
-                e.printStackTrace();
-            }
-        }
 
         InfluxDbConverter converter = new InfluxDbConverter();
         appenderExecutor = new AppenderExecutor(converter, serieConfig, influxDB, getContext());

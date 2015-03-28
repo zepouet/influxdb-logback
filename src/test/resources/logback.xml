@@ -10,7 +10,7 @@
         <influxDbLogin>root</influxDbLogin>
         <influxDbPassword>root</influxDbPassword>
         <serieConfig>
-            <database>mydb</database>
+            <database>testdb</database>
             <version>0.8</version>
             <!--
             <name>machine.%X{machine}.type.%X{type} temperature_${byMonth}</name>
