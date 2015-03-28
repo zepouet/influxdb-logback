@@ -1,0 +1,5 @@
+# Ignorer les objets et les archives
+
+target
+.idea
+InfluxDbAppender.iml

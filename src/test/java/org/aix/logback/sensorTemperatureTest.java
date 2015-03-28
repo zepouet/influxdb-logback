@@ -27,24 +27,17 @@ public class sensorTemperatureTest {
         int previousTempMin = 10;
         int previousTempMax = 30;
         int i = 0;
-        while(++i<10) {
+        while(true) {
             MDC.put("machine", "unit42");
             MDC.put("type", "assembly");
-            int temperatureA = temperatureBetween(previousTempMin, previousTempMax);
-            int temperatureB = temperatureBetween(previousTempMin, previousTempMax);
-            if (temperatureA <= temperatureB) {
-                previousTempMin = temperatureA;
-                previousTempMax = temperatureB;
-            } else {
-                previousTempMin = temperatureB;
-                previousTempMax = temperatureA;
-            }
+            int temperatureINT = temperatureBetween(19, 30);
+            int temperatureEXT = temperatureBetween(5, 25);
             try {
                 Thread.sleep(rand.nextInt(500));
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            logger.info("timestamp,external,internal", System.currentTimeMillis(), previousTempMin+"", previousTempMax+"");
+            logger.info("timestamp,external,internal", System.currentTimeMillis(), temperatureEXT, temperatureINT);
         }
 
 
