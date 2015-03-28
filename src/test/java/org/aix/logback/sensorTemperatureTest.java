@@ -105,10 +105,11 @@ public class sensorTemperatureTest {
         System.out.println("@Before - setUp");
         try {
             // TODO : Ugly code -- Find a way with dockerExec to verify InfluxDB processus is right
-            Thread.sleep(3000);
+            Thread.sleep(10000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        System.out.println("boot2dockerIP="+boot2dockerIP);
         this.influxDB = InfluxDBFactory.connect("http://"+boot2dockerIP+":8086", "root", "root");
         if (this.influxDB == null) {
             fail("cannot connect to influxdb");
@@ -119,16 +120,11 @@ public class sensorTemperatureTest {
     @After
     public void tearDown() {
         System.out.println("@After - tearDown");
-        this.influxDB.deleteDatabase("testdb");
+        //this.influxDB.deleteDatabase("testdb");
     }
 
     @Test
-    public void foo2() {
-        assertTrue(true);
-    }
-
     public void sensorTemperatureByMonth() {
-
         Logger logger = LoggerFactory.getLogger("sensorTemperature");
         int previousTempMin = 10;
         int previousTempMax = 30;
@@ -147,36 +143,4 @@ public class sensorTemperatureTest {
         }
     }
 
-
-    static class LogStreamInputStream extends InputStream {
-
-        private final LogStream logStream;
-        private ByteBuffer currentBuffer = null;
-
-        /**
-         * @param logStream
-         */
-        public LogStreamInputStream(final LogStream logStream) {
-            super();
-            this.logStream = logStream;
-        }
-
-        @Override
-        public int read() throws IOException {
-            if (this.currentBuffer == null) {
-                if (this.logStream.hasNext()) {
-                    this.currentBuffer = this.logStream.next().content();
-                }
-            }
-
-            int result;
-            if (this.currentBuffer.remaining() > 0) {
-                result = this.currentBuffer.get();
-            } else {
-                this.currentBuffer = this.logStream.next().content();
-                result = this.currentBuffer.get();
-            }
-            return result;
-        }
-    }
 }
