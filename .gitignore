@@ -1,5 +1,19 @@
-# Ignorer les objets et les archives
-
-target
+.DS_Store
+.gradle
 .idea
-InfluxDbAppender.iml
+.classpath
+.project
+.settings
+.yardoc
+.yardopts
+build
+target
+out
+*.iml
+*.ipr
+*.iws
+test-output
+test-results
+test-tmp
+*.class
+*.swp
