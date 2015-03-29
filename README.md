@@ -39,11 +39,11 @@ Add the following to your logback.xml configuration file.
             <influxDbPort>8086</influxDbPort>
             <influxDbLogin>root</influxDbLogin>
             <influxDbPassword>root</influxDbPassword>
-            <serieConfig>
+            <serie>
                 <database>aTimeSeries</database>
                 <name>customer_events_${byDay}</name>
                 <columns>time,customerId,type</columns>
-             </serieConfig>
+             </serie>
         </appender>
 
         <logger name="CustomerEvents" >

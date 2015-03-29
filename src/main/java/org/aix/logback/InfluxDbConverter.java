@@ -10,7 +10,7 @@ import org.influxdb.dto.Serie;
  */
 public class InfluxDbConverter {
 
-    public Serie toInflux(ILoggingEvent iLoggingEvent, SerieConfig serieConfig, Context context) {
+    public Serie toInflux(ILoggingEvent iLoggingEvent, InfluxDbSerie serieConfig, Context context) {
 
         String serieName = serieConfig.getName();
 

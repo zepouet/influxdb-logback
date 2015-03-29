@@ -4,23 +4,34 @@
     <timestamp key="byMonth" datePattern="yyyyMM"/>
     <timestamp key="byYear" datePattern="yyyy"/>
 
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%-4relative [%thread] %-5level %logger{35} - %msg %n</pattern>
+        </encoder>
+    </appender>
+
     <appender name="SENSOR_TEMPERATURE" class="org.aix.logback.InfluxDbAppender">
-        <influxDbUrl>http://192.168.59.103</influxDbUrl>
-        <influxDbPort>8086</influxDbPort>
-        <influxDbLogin>root</influxDbLogin>
-        <influxDbPassword>root</influxDbPassword>
-        <serieConfig>
+        <source>
+            <ip>192.168.59.103</ip>
+            <port>8086</port>
+            <user>root</user>
+            <password>root</password>
             <database>testdb</database>
+            <create>true</create>
+        </source>
+        <serie>
             <version>0.8</version>
-            <!--
             <name>machine.%X{machine}.type.%X{type} temperature_${byMonth}</name>
-            -->
-            <name>sensors</name>
-        </serieConfig>
+            <timeUnit>MILLISECONDS</timeUnit>
+        </serie>
     </appender>
 
     <logger name="sensorTemperature" level="info">
         <appender-ref ref="SENSOR_TEMPERATURE"/>
     </logger>
+
+    <root level="DEBUG">
+        <appender-ref ref="STDOUT" />
+    </root>
 
 </configuration>

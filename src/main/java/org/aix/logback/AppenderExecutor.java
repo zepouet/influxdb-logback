@@ -5,21 +5,22 @@ import ch.qos.logback.core.Context;
 import org.influxdb.InfluxDB;
 import org.influxdb.dto.Serie;
 
-import java.util.concurrent.TimeUnit;
-
 /**
  * Converts a log event into a compatible object for api influxdb
  */
 public class AppenderExecutor {
 
     private final InfluxDbConverter influxDbConverter;
-    private final SerieConfig serieConfig;
+    private final InfluxDbSerie serie;
     private final InfluxDB influxDB;
     private final Context context;
+    private final InfluxDbSource source;
 
-    public AppenderExecutor(InfluxDbConverter influxDbConverter, SerieConfig serieConfig, InfluxDB influxDB, Context context) {
+    public AppenderExecutor(InfluxDbConverter influxDbConverter, InfluxDbSource source,
+                            InfluxDbSerie serie, InfluxDB influxDB, Context context) {
         this.influxDbConverter = influxDbConverter;
-        this.serieConfig = serieConfig;
+        this.serie = serie;
+        this.source = source;
         this.influxDB = influxDB;
         this.context = context;
     }
@@ -31,8 +32,8 @@ public class AppenderExecutor {
      * @param logEvent The event that we are logging
      */
     public void append(final ILoggingEvent logEvent) {
-        Serie serie = influxDbConverter.toInflux(logEvent, serieConfig, context);
-        influxDB.write(serieConfig.getDatabase(), TimeUnit.MICROSECONDS, serie);
+        Serie serie = influxDbConverter.toInflux(logEvent, this.serie, context);
+        influxDB.write(this.source.getDatabase(), this.serie.getTimeUnit(), serie);
     }
 
 }

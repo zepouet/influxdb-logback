@@ -5,6 +5,8 @@ import ch.qos.logback.core.AppenderBase;
 import org.influxdb.InfluxDB;
 import org.influxdb.InfluxDBFactory;
 
+import java.util.StringTokenizer;
+
 /**
  * Created by ${USER} on ${DATE}.
  */
@@ -12,41 +14,11 @@ public class InfluxDbAppender extends AppenderBase<ILoggingEvent> {
 
     private AppenderExecutor appenderExecutor;
 
-    private String influxDbUrl;
-    private String influxDbPort;
-    private String influxDbLogin;
-    private String influxDbPassword;
-    private SerieConfig serieConfig;
+    private InfluxDbSource source;
+    private InfluxDbSerie serie;
 
-    public void setSerieConfig(SerieConfig serieConfig) {
-        this.serieConfig = serieConfig;
-    }
-
-    @Override
-    public String toString() {
-        return "InfluxdbAppender{" +
-                "serieConfig=" + serieConfig +
-                ", influxDbUrl='" + influxDbUrl + '\'' +
-                ", influxDbPort='" + influxDbPort + '\'' +
-                ", influxDbLogin='" + influxDbLogin + '\'' +
-                ", influxDbPassword='" + influxDbPassword + '\'' +
-                '}';
-    }
-
-    public void setInfluxDbUrl(String influxDbUrl) {
-        this.influxDbUrl = influxDbUrl;
-    }
-
-    public void setInfluxDbPort(String influxDbPort) {
-        this.influxDbPort = influxDbPort;
-    }
-
-    public void setInfluxDbLogin(String influxDbLogin) {
-        this.influxDbLogin = influxDbLogin;
-    }
-
-    public void setInfluxDbPassword(String influxDbPassword) {
-        this.influxDbPassword = influxDbPassword;
+    public void setSerie(InfluxDbSerie serie) {
+        this.serie = serie;
     }
 
     @Override
@@ -60,21 +32,43 @@ public class InfluxDbAppender extends AppenderBase<ILoggingEvent> {
         initExecutor();
     }
 
+    public AppenderExecutor getAppenderExecutor() {
+        return this.appenderExecutor;
+    }
+
+    public void setAppenderExecutor(AppenderExecutor appenderExecutor) {
+        this.appenderExecutor = appenderExecutor;
+    }
+
+    public InfluxDbSource getSource() {
+        return this.source;
+    }
+
+    public void setSource(InfluxDbSource source) {
+        this.source = source;
+    }
+
+    public InfluxDbSerie getSerie() {
+        return this.serie;
+    }
+
     /**
      * This is an ad-hoc dependency injection mechanism. We don't want create all these classes every time a message is
      * logged. They will hang around for the lifetime of the appender.
      */
     private void initExecutor() {
         System.out.println(":: initExecutor :: begin");
-        System.out.println(toString());
-
-        InfluxDB influxDB = InfluxDBFactory.connect(influxDbUrl + ":" + influxDbPort, influxDbLogin, influxDbPassword);
+        InfluxDB influxDB = InfluxDBFactory.connect("http://"+ source.getIp() + ":" + source.getPort()
+                , source.getUser(), source.getPassword());
 
         InfluxDbConverter converter = new InfluxDbConverter();
-        appenderExecutor = new AppenderExecutor(converter, serieConfig, influxDB, getContext());
+        appenderExecutor = new AppenderExecutor(converter, source, serie, influxDB, getContext());
         System.out.println(":: initExecutor :: end");
 
+        if ("true".equalsIgnoreCase(this.source.getCreate())) {
+            System.out.println("create database : " + this.source.getDatabase());
+            influxDB.createDatabase(this.source.getDatabase());
+        }
     }
-
 
 }
