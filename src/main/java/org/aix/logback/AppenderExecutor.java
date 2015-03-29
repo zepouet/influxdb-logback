@@ -11,15 +11,15 @@ import org.influxdb.dto.Serie;
 public class AppenderExecutor {
 
     private final InfluxDbConverter influxDbConverter;
-    private final InfluxDbSerie serie;
+    private final InfluxDbSerie influxDbSerie;
     private final InfluxDB influxDB;
     private final Context context;
     private final InfluxDbSource source;
 
     public AppenderExecutor(InfluxDbConverter influxDbConverter, InfluxDbSource source,
-                            InfluxDbSerie serie, InfluxDB influxDB, Context context) {
+                            InfluxDbSerie influxDbSerie, InfluxDB influxDB, Context context) {
         this.influxDbConverter = influxDbConverter;
-        this.serie = serie;
+        this.influxDbSerie = influxDbSerie;
         this.source = source;
         this.influxDB = influxDB;
         this.context = context;
@@ -32,8 +32,8 @@ public class AppenderExecutor {
      * @param logEvent The event that we are logging
      */
     public void append(final ILoggingEvent logEvent) {
-        Serie serie = influxDbConverter.toInflux(logEvent, this.serie, context);
-        influxDB.write(this.source.getDatabase(), this.serie.getTimeUnit(), serie);
+        Serie serie = influxDbConverter.toInflux(logEvent, this.influxDbSerie, context);
+        influxDB.write(this.source.getDatabase(), this.influxDbSerie.getRawTimeUnit(), serie);
     }
 
 }

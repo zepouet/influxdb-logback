@@ -5,8 +5,6 @@ import ch.qos.logback.core.AppenderBase;
 import org.influxdb.InfluxDB;
 import org.influxdb.InfluxDBFactory;
 
-import java.util.StringTokenizer;
-
 /**
  * Created by ${USER} on ${DATE}.
  */
@@ -66,8 +64,8 @@ public class InfluxDbAppender extends AppenderBase<ILoggingEvent> {
         System.out.println(":: initExecutor :: end");
 
         if ("true".equalsIgnoreCase(this.source.getCreate())) {
+            influxDB.createDatabase("testdb");
             System.out.println("create database : " + this.source.getDatabase());
-            influxDB.createDatabase(this.source.getDatabase());
         }
     }
 

@@ -9,14 +9,18 @@ public class InfluxDbSerie {
 
     private String name;
     private String version;
-    private TimeUnit timeUnit;
+    private String timeUnit;
 
-    public TimeUnit getTimeUnit() {
+    public String getTimeUnit() {
         return this.timeUnit;
     }
 
-    public void setTimeUnit(String name) {
-        this.timeUnit = TimeUnit.valueOf(name);
+    public void setTimeUnit(String timeUnit) {
+        this.timeUnit = timeUnit;
+    }
+
+    public TimeUnit getRawTimeUnit() {
+        return TimeUnit.valueOf(timeUnit);
     }
 
     @Override

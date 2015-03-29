@@ -19,6 +19,7 @@ public class InfluxDbConverter {
         patternLayout.setPattern(serieName);
         patternLayout.start();
         String formattedSerieName = patternLayout.doLayout(iLoggingEvent);
+        System.out.println("formattedSerieName="+formattedSerieName);
 
         Serie serie = new Serie.Builder(formattedSerieName)
                 .columns(iLoggingEvent.getFormattedMessage().split(","))
