@@ -21,10 +21,10 @@
         </source>
         <serie>
             <version>0.8</version>
-            <!--
             <name>machine.%X{machine}.type.%X{type} temperature_${byMonth}</name>
-            -->
+            <!--
             <name>sensors</name>
+            -->
             <timeUnit>MILLISECONDS</timeUnit>
         </serie>
     </appender>
