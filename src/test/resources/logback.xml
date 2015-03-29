@@ -20,7 +20,7 @@
     </appender>
 
     <logger name="sensorTemperature" level="info">
-        <appender-ref ref="SENSOR_TEMPERATURE" />
+        <appender-ref ref="SENSOR_TEMPERATURE"/>
     </logger>
 
 </configuration>

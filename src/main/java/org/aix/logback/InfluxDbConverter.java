@@ -1,16 +1,9 @@
 package org.aix.logback;
 
 import ch.qos.logback.classic.PatternLayout;
-import ch.qos.logback.classic.encoder.PatternLayoutEncoder;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.Context;
 import org.influxdb.dto.Serie;
-import org.slf4j.LoggerFactory;
-import org.slf4j.MDC;
-
-import java.util.Iterator;
-import java.util.Map;
-import java.util.logging.Logger;
 
 /**
  * Created by nicolas on 15/03/15.

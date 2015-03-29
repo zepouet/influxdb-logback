@@ -1,7 +1,5 @@
 package org.aix.logback;
 
-import org.slf4j.MDC;
-
 /**
  * Created by nicolas on 15/03/15.
  */

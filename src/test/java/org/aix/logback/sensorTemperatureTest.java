@@ -1,10 +1,7 @@
 package org.aix.logback;
 
-import com.google.common.io.CharStreams;
 import com.spotify.docker.client.DefaultDockerClient;
-import com.spotify.docker.client.DockerCertificates;
 import com.spotify.docker.client.DockerClient;
-import com.spotify.docker.client.LogStream;
 import com.spotify.docker.client.messages.*;
 import org.influxdb.InfluxDB;
 import org.influxdb.InfluxDBFactory;
@@ -13,16 +10,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.URI;
-import java.nio.ByteBuffer;
-import java.nio.file.Paths;
 import java.util.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 /**
@@ -30,14 +20,15 @@ import static org.junit.Assert.fail;
  */
 public class sensorTemperatureTest {
 
-    private Random rand = new Random();
-    private final int temperatureBetween(int min, int max) {
-        return rand.nextInt(max-min+1)+min;
+    private final Random rand = new Random();
+
+    private int temperatureBetween(int min, int max) {
+        return rand.nextInt(max - min + 1) + min;
     }
 
     private static DockerClient docker = null;
-    private InfluxDB influxDB;
     private static String boot2dockerIP;
+    private InfluxDB influxDB;
 
     @BeforeClass
     public static void WarmUpTheEngine() {
@@ -64,7 +55,7 @@ public class sensorTemperatureTest {
 
             // bind container ports to host ports
             final Map<String, List<PortBinding>> portBindings = new HashMap<String, List<PortBinding>>();
-            for(String port : ports) {
+            for (String port : ports) {
                 List<PortBinding> hostPorts = new ArrayList<PortBinding>();
                 hostPorts.add(PortBinding.of("0.0.0.0", port));
                 portBindings.put(port, hostPorts);
@@ -85,9 +76,9 @@ public class sensorTemperatureTest {
             Properties props = new Properties();
             InputStream is = ClassLoader.getSystemResourceAsStream("configuration.properties");
             props.load(is);
-            boot2dockerIP = (String)props.get("boot2docker.ip");
+            boot2dockerIP = (String) props.get("boot2docker.ip");
 
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             fail(e.getMessage());
         }
@@ -109,27 +100,22 @@ public class sensorTemperatureTest {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        System.out.println("boot2dockerIP="+boot2dockerIP);
-        this.influxDB = InfluxDBFactory.connect("http://"+boot2dockerIP+":8086", "root", "root");
-        if (this.influxDB == null) {
-            fail("cannot connect to influxdb");
-        }
-        this.influxDB.createDatabase("testdb");
+        System.out.println("boot2dockerIP=" + boot2dockerIP);
+        influxDB = InfluxDBFactory.connect("http://" + boot2dockerIP + ":8086", "root", "root");
+        influxDB.createDatabase("testdb");
     }
 
     @After
     public void tearDown() {
         System.out.println("@After - tearDown");
-        //this.influxDB.deleteDatabase("testdb");
+        this.influxDB.deleteDatabase("testdb");
     }
 
     @Test
     public void sensorTemperatureByMonth() {
         Logger logger = LoggerFactory.getLogger("sensorTemperature");
-        int previousTempMin = 10;
-        int previousTempMax = 30;
         int i = 0;
-        while(i++<10) {
+        while (++i < 10) {
             MDC.put("machine", "unit42");
             MDC.put("type", "assembly");
             int temperatureINT = temperatureBetween(19, 30);

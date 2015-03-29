@@ -15,7 +15,7 @@ public class AppenderExecutor {
     private final InfluxDbConverter influxDbConverter;
     private final SerieConfig serieConfig;
     private final InfluxDB influxDB;
-    private Context context;
+    private final Context context;
 
     public AppenderExecutor(InfluxDbConverter influxDbConverter, SerieConfig serieConfig, InfluxDB influxDB, Context context) {
         this.influxDbConverter = influxDbConverter;
@@ -25,11 +25,11 @@ public class AppenderExecutor {
     }
 
     /**
-      * The main append method. Takes the event that is being logged, formats if for InfluxDB and then sends it over the wire
-      * to the metrics endpoints
-      *
-      * @param logEvent The event that we are logging
-    */
+     * The main append method. Takes the event that is being logged, formats if for InfluxDB and then sends it over the wire
+     * to the metrics endpoints
+     *
+     * @param logEvent The event that we are logging
+     */
     public void append(final ILoggingEvent logEvent) {
         Serie serie = influxDbConverter.toInflux(logEvent, serieConfig, context);
         influxDB.write(serieConfig.getDatabase(), TimeUnit.MICROSECONDS, serie);
