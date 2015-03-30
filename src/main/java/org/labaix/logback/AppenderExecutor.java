@@ -1,9 +1,12 @@
-package org.aix.logback;
+package org.labaix.logback;
 
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.Context;
 import org.influxdb.InfluxDB;
 import org.influxdb.dto.Serie;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * Converts a log event into a compatible object for api influxdb
@@ -32,7 +35,9 @@ public class AppenderExecutor {
      * @param logEvent The event that we are logging
      */
     public void append(final ILoggingEvent logEvent) {
-        Serie serie = influxDbConverter.toInflux(logEvent, this.influxDbSerie, context);
+        String loggerName = logEvent.getLoggerName();
+        //InfluxDbSerie influxDbSerie = influxDbSeries.stream().filter(o -> o.getId().equalsIgnoreCase(loggerName)).findFirst().get();
+        Serie serie = influxDbConverter.toInflux(logEvent, influxDbSerie, context);
         influxDB.write(this.source.getDatabase(), this.influxDbSerie.getRawTimeUnit(), serie);
     }
 

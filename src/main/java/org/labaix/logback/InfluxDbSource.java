@@ -1,4 +1,4 @@
-package org.aix.logback;
+package org.labaix.logback;
 
 /**
  * Created by nicolas on 29/03/15.

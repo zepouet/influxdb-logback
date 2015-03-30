@@ -2,7 +2,6 @@
 
     <timestamp key="byDay" datePattern="yyyyMMdd"/>
     <timestamp key="byMonth" datePattern="yyyyMM"/>
-    <timestamp key="byYear" datePattern="yyyy"/>
 
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
@@ -10,7 +9,7 @@
         </encoder>
     </appender>
 
-    <appender name="SENSOR_TEMPERATURE" class="org.aix.logback.InfluxDbAppender">
+    <appender name="INFLUXDB" class="org.labaix.logback.InfluxDbAppender">
         <source>
             <ip>192.168.59.103</ip>
             <port>8086</port>
@@ -18,19 +17,38 @@
             <password>root</password>
             <database>testdb</database>
             <create>true</create>
+            <version>0.8</version>
         </source>
         <serie>
-            <version>0.8</version>
+            <id>SensorTemperature</id>
             <name>machine.%X{machine}.type.%X{type} temperature_${byMonth}</name>
-            <!--
-            <name>sensors</name>
-            -->
             <timeUnit>MILLISECONDS</timeUnit>
         </serie>
     </appender>
 
-    <logger name="SensorTemperature" level="info">
-        <appender-ref ref="SENSOR_TEMPERATURE"/>
+    <logger name="SensorTemperature" level="info" additivity="false">
+        <appender-ref ref="INFLUXDB"/>
+    </logger>
+
+    <appender name="INFLUXDB2" class="org.labaix.logback.InfluxDbAppender">
+        <source>
+            <ip>192.168.59.103</ip>
+            <port>8086</port>
+            <user>root</user>
+            <password>root</password>
+            <database>userdb</database>
+            <create>true</create>
+            <version>0.8</version>
+        </source>
+        <serie>
+            <id>UserEvents</id>
+            <name>user_events_${byDay}</name>
+            <timeUnit>SECONDS</timeUnit>
+        </serie>
+    </appender>
+
+    <logger name="UserEvents" level="info">
+        <appender-ref ref="INFLUXDB2"/>
     </logger>
 
     <root level="DEBUG">
