@@ -1,8 +1,8 @@
 INFLUXDB-LOGBACK
 ================
 
-An Influx Appender for Logback
-------------------------------
+An InfluxDB Appender for Logback
+--------------------------------
 
 Use this appender to log messages with logback to a influxdb server.
 
@@ -12,8 +12,8 @@ Installation
 -----------------------------------
 
 Simply add logback-gelf to your classpath. Either
-[download the jar](https://github.com/Moocar/logback-gelf/downloads)
-or if you're in [maven](http://mvnrepository.com/artifact/me.moocar/logback-gelf) land, the dependency details are below.
+[download the jar](https://github.com/zepouet/influxdb-logback/downloads)
+or if you're in [maven](http://mvnrepository.com/artifact/zepouet/influxdb-logback) land, the dependency details are below.
 
         <dependencies>
             ...
