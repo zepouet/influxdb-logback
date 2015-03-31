@@ -83,7 +83,8 @@ logback-influxdb to look out for this mapping every time a message is logged.
         
         So you could use %X{ipAddress} into serie name pattern.
 
-2.  Gather information form environment variable
+2.  Gather information form environment variable (TODO)
+
         ...
         <appender name="INFLUXDB" class="org.aix.logback.InfluxDbAppender">
             ...
