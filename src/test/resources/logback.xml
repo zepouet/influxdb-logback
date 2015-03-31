@@ -51,7 +51,7 @@
         <appender-ref ref="INFLUXDB2"/>
     </logger>
 
-    <root level="DEBUG">
+    <root level="info">
         <appender-ref ref="STDOUT" />
     </root>
 
