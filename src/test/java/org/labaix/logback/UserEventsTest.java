@@ -27,7 +27,7 @@ import static org.junit.Assert.fail;
 public class UserEventsTest {
 
     private final Random rand = new Random();
-
+    private final Logger loggerXXX = LoggerFactory.getLogger(UserEventsTest.class);
     private static String boot2dockerIP;
     private static InfluxDB influxDB;
 
@@ -95,11 +95,13 @@ public class UserEventsTest {
     class MonRunnable implements Runnable {
         @Override
         public void run() {
-            Logger logger = LoggerFactory.getLogger("UserEvents");
+
             try {
                 int i = 0;
-                while(i++<10) {
-                    logger.info("code,value,controller_action", 200+i, 234+i, "users#show");
+                while(i++ < 10) {
+                    Thread.currentThread().sleep(23);
+                    //System.out.println("lol");
+                    loggerXXX.info("thread, code,value,controller_action", Thread.currentThread().getName(), 200 + i, 234 + i, "users#show");
                 }
             }
             catch (Exception e) {
